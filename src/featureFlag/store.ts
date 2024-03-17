@@ -1,16 +1,19 @@
-import { localStorageFetcher } from "./fetcher";
+import { localStorageRepository } from "./repository";
 import { FeatureFlag } from "./types";
 
 export const createFeatureFlagStore = ({
-  fetcher,
+  repository,
 }: {
-  fetcher: () => Promise<FeatureFlag>;
+  repository: {
+    getFlags: () => Promise<FeatureFlag>;
+    setFlag: (key: string, value: boolean) => Promise<FeatureFlag>;
+  };
 }) => {
   let store: FeatureFlag = {};
   let listeners: ((store: FeatureFlag) => void)[] = [];
 
   const initializeStore = async () => {
-    const loadedFlags = await fetcher(); // TODO: 외부에서 fetcher를 주입받도록 변경
+    const loadedFlags = await repository.getFlags(); // TODO: 외부에서 fetcher를 주입받도록 변경
     dispatch(loadedFlags); // 로드된 flags로 store 상태 업데이트
   };
 
@@ -29,11 +32,16 @@ export const createFeatureFlagStore = ({
     listeners.forEach((l) => l(store));
   };
 
+  const updateFlag = async (key: string, value: boolean) => {
+    const newStore = await repository.setFlag(key, value);
+    dispatch(newStore);
+  };
+
   initializeStore();
 
-  return { getStore, subscribe, dispatch };
+  return { getStore, subscribe, dispatch, updateFlag };
 };
 
 export const store = createFeatureFlagStore({
-  fetcher: localStorageFetcher,
+  repository: localStorageRepository,
 });
