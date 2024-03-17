@@ -17,7 +17,7 @@ export const createFeatureFlagStore = ({
   const getStore = () => store;
 
   const subscribe = (listener: (store: FeatureFlag) => void) => {
-    listener(store);
+    listeners.push(listener);
 
     return () => {
       listeners = listeners.filter((l) => l !== listener);
