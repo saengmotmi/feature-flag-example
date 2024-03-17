@@ -5,7 +5,7 @@ import { useFeatureFlag } from "./featureFlag/useFeatureFlag";
 function App() {
   useLocalStorageInitialize();
 
-  const { featureFlags, updateFlag } = useFeatureFlag();
+  const { featureFlags, updateFlag, getFlag } = useFeatureFlag();
 
   return (
     <div>
@@ -13,12 +13,12 @@ function App() {
       <label>
         <input
           type="checkbox"
-          checked={featureFlags.newUIFeature.value}
+          checked={getFlag("newUIFeature").value}
           onChange={() => {
-            updateFlag("newUIFeature", !featureFlags.newUIFeature.value);
+            updateFlag("newUIFeature", !getFlag("newUIFeature").value);
           }}
         />
-        {featureFlags.newUIFeature.label}
+        {getFlag("newUIFeature").label}
       </label>
     </div>
   );

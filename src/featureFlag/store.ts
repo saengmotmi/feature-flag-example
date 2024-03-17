@@ -13,8 +13,8 @@ export const createFeatureFlagStore = ({
   let listeners: ((store: FeatureFlag) => void)[] = [];
 
   const initializeStore = async () => {
-    const loadedFlags = await repository.getFlags(); // TODO: 외부에서 fetcher를 주입받도록 변경
-    dispatch(loadedFlags); // 로드된 flags로 store 상태 업데이트
+    const loadedFlags = await repository.getFlags();
+    dispatch(loadedFlags);
   };
 
   const getStore = () => store;

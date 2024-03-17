@@ -7,5 +7,6 @@ export const useFeatureFlag = () => {
   return {
     featureFlags,
     updateFlag: store.updateFlag,
+    getFlag: (key: string) => featureFlags[key],
   };
 };
