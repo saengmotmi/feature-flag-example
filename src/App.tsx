@@ -5,9 +5,23 @@ import { useFeatureFlag } from "./featureFlag/useFeatureFlag";
 function App() {
   useLocalStorageInitialize();
 
-  const featureFlags = useFeatureFlag();
+  const { featureFlags, update } = useFeatureFlag();
 
-  return <pre>{JSON.stringify(featureFlags, null, 2)}</pre>;
+  return (
+    <div>
+      <pre>{JSON.stringify(featureFlags, null, 2)}</pre>
+      <label>
+        <input
+          type="checkbox"
+          checked={featureFlags.newUIFeature.value}
+          onChange={() => {
+            update("newUIFeature", !featureFlags.newUIFeature.value);
+          }}
+        />
+        {featureFlags.newUIFeature.label}
+      </label>
+    </div>
+  );
 }
 
 export default App;
